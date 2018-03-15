@@ -47,7 +47,8 @@ class MainActivity : AppCompatActivity() {
 //            overlay?.recycle()
         }
         overlay = Bitmap.createScaledBitmap(bitmap, bitmap.width / scaleFactor, bitmap.height / scaleFactor, false)
-        overlay = NativeStackBlur.process(overlay, 3) // StackBlur高斯模糊
+//        overlay = StackBlurManager(overlay).process(3) // Java StackBlur高斯模糊
+        overlay = NativeStackBlur.process(overlay, 3) // NativeStackBlur高斯模糊
         imageView.setImageBitmap(overlay)
     }
 }
