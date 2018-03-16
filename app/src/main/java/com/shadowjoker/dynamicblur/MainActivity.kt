@@ -32,23 +32,17 @@ class MainActivity : AppCompatActivity() {
             this.scrollView.buildDrawingCache()
             val bitmap = this.scrollView.drawingCache ?: return@setOnScrollChangeListener//截取区域视图
             val bitmap1 = Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, 400)
-
-            if (bitmap != null) {
-                doBlur(bitmap1, this.iv_blur, 8) //模糊处理
-            }
-//            bitmap1.recycle()
+            doBlur(bitmap1, this.iv_blur, 10)
+            bitmap1.recycle()
             this.scrollView.isDrawingCacheEnabled = false
         }
     }
 
     private fun doBlur(bitmap: Bitmap, imageView: ImageView, radius: Int) {
-        val scaleFactor = 8
-        if (overlay != null) {
-//            overlay?.recycle()
-        }
-        overlay = Bitmap.createScaledBitmap(bitmap, bitmap.width / scaleFactor, bitmap.height / scaleFactor, false)
-//        overlay = StackBlurManager(overlay).process(3) // Java StackBlur高斯模糊
-        overlay = NativeStackBlur.process(overlay, 3) // NativeStackBlur高斯模糊
+        overlay?.recycle()
+//        overlay = bitmap
+//        overlay = StackBlurManager(overlay).process(radius) // Java StackBlur高斯模糊
+        overlay = NativeStackBlur.process(bitmap, radius) // Native StackBlur高斯模糊
         imageView.setImageBitmap(overlay)
     }
 }
