@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.M)
     private fun initScrollListener() {
         this.scrollView.setOnScrollChangeListener { _, _, _, _, _ ->
-            if (SystemClock.elapsedRealtime() - lastTime < 50) {
+            if (SystemClock.elapsedRealtime() - lastTime < 20) {
                 return@setOnScrollChangeListener
             }
             lastTime = SystemClock.elapsedRealtime()
@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
             this.scrollView.buildDrawingCache()
             val bitmap = this.scrollView.drawingCache ?: return@setOnScrollChangeListener//截取区域视图
             val bitmap1 = Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, 400)
-            doBlur(bitmap1, this.iv_blur, 10)
+            doBlur(bitmap1, this.iv_blur, 15)
             bitmap1.recycle()
             this.scrollView.isDrawingCacheEnabled = false
         }
