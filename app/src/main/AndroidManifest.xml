@@ -16,5 +16,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.shadowjoker.dynamicblur.NativeStackBlurActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.shadowjoker.dynamicblur.JavaStackBlurActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.shadowjoker.dynamicblur.RenderScriptBlurActivity"
+            android:screenOrientation="portrait" />
     </application>
 </manifest>

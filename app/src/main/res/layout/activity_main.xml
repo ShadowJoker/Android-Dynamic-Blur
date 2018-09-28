@@ -1,62 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:gravity="center"
     android:orientation="vertical">
 
-    <ScrollView
-        android:id="@+id/scrollView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:overScrollMode="never">
+    <Button
+        android:id="@+id/button_java"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text="Java层高斯模糊"
+        android:textColor="#333333"
+        android:textSize="16dp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:orientation="vertical">
+    <Button
+        android:id="@+id/button_native"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text="Native层高斯模糊"
+        android:textColor="#333333"
+        android:textSize="16dp" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="400px"
-                android:background="@color/black" />
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:src="@drawable/image2" />
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_marginTop="15dp"
-                android:src="@drawable/image3" />
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_marginTop="15dp"
-                android:src="@drawable/image1" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:background="@color/white" />
-        </LinearLayout>
-    </ScrollView>
-
-    <ImageView
-        android:id="@+id/iv_blur"
-        android:layout_width="match_parent"
-        android:layout_height="400px" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="400px"
-        android:background="@color/trans"
-        android:gravity="center"
-        android:text="少女前线壁纸"
-        android:textColor="@color/white"
-        android:textSize="36dp" />
-</FrameLayout>
+    <Button
+        android:id="@+id/button_renderscript"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text="RenderScript高斯模糊"
+        android:textColor="#333333"
+        android:textSize="16dp" />
+</LinearLayout>

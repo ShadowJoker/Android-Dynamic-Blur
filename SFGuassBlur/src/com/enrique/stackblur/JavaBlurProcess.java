@@ -78,7 +78,7 @@ class JavaBlurProcess implements BlurProcess {
 		int h = original.getHeight();
 		int[] currentPixels = new int[w * h];
 		original.getPixels(currentPixels, 0, w, 0, 0, w, h);
-		int cores = StackBlurManager.EXECUTOR_THREADS;
+		int cores = SFGuassBlurManager.EXECUTOR_THREADS;
 
 		ArrayList<BlurTask> horizontal = new ArrayList<BlurTask>(cores);
 		ArrayList<BlurTask> vertical = new ArrayList<BlurTask>(cores);
@@ -88,13 +88,13 @@ class JavaBlurProcess implements BlurProcess {
 		}
 
 		try {
-			StackBlurManager.EXECUTOR.invokeAll(horizontal);
+			SFGuassBlurManager.EXECUTOR.invokeAll(horizontal);
 		} catch (InterruptedException e) {
 			return null;
 		}
 
 		try {
-			StackBlurManager.EXECUTOR.invokeAll(vertical);
+			SFGuassBlurManager.EXECUTOR.invokeAll(vertical);
 		} catch (InterruptedException e) {
 			return null;
 		}

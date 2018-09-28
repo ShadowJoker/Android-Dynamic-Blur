@@ -2,59 +2,47 @@ package com.enrique.stackblur;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.os.Build;
 import android.support.v8.renderscript.Allocation;
 import android.support.v8.renderscript.Element;
 import android.support.v8.renderscript.RenderScript;
+import android.support.v8.renderscript.ScriptIntrinsicBlur;
 
 /**
  * @see JavaBlurProcess
  * Blur using renderscript.
  */
 class RSBlurProcess implements BlurProcess {
-	private final Context context;
-	private final RenderScript _rs;
 
-	public RSBlurProcess(Context context) {
-		this.context = context.getApplicationContext();
-		_rs = RenderScript.create(this.context);
-	}
+    private final RenderScript renderScript;
 
-	@Override
-	public Bitmap blur(Bitmap original, float radius) {
-		int width = original.getWidth();
-		int height = original.getHeight();
-		Bitmap blurred = original.copy(Bitmap.Config.ARGB_8888, true);
+    public RSBlurProcess(Context context) {
+        renderScript = RenderScript.create(context.getApplicationContext());
+    }
 
-		ScriptC_blur blurScript = new ScriptC_blur(_rs, context.getResources(), R.raw.blur);
+    @Override
+    public Bitmap blur(Bitmap original, float radius) {
+        int width = Math.round(original.getWidth() / SFGuassBlurManager.scaleRatio);
+        int height = Math.round(original.getHeight() / SFGuassBlurManager.scaleRatio);
+        Bitmap inputBmp = Bitmap.createScaledBitmap(original, width, height, false);
 
-		Allocation inAllocation = Allocation.createFromBitmap(_rs, blurred, Allocation.MipmapControl.MIPMAP_NONE, Allocation.USAGE_SCRIPT);
+        // Allocate memory for Renderscript to work with
+        final Allocation input = Allocation.createFromBitmap(renderScript, inputBmp);
+        final Allocation output = Allocation.createTyped(renderScript, input.getType());
 
-		blurScript.set_gIn(inAllocation);
-		blurScript.set_width(width);
-		blurScript.set_height(height);
-		blurScript.set_radius((int) radius);
+        // Load up an instance of the specific script that we want to use.
+        ScriptIntrinsicBlur scriptIntrinsicBlur = ScriptIntrinsicBlur.create(renderScript, Element.U8_4(renderScript));
+        scriptIntrinsicBlur.setInput(input);
 
-		int[] row_indices = new int[height];
-		for (int i = 0; i < height; i++) {
-			row_indices[i] = i;
-		}
+        // Set the blur radius
+        scriptIntrinsicBlur.setRadius(radius);
 
-		Allocation rows = Allocation.createSized(_rs, Element.U32(_rs), height, Allocation.USAGE_SCRIPT);
-		rows.copyFrom(row_indices);
+        // Start the ScriptIntrinisicBlur
+        scriptIntrinsicBlur.forEach(output);
 
-		row_indices = new int[width];
-		for (int i = 0; i < width; i++) {
-			row_indices[i] = i;
-		}
+        // Copy the output to the blurred bitmap
+        output.copyTo(inputBmp);
 
-		Allocation columns = Allocation.createSized(_rs, Element.U32(_rs), width, Allocation.USAGE_SCRIPT);
-		columns.copyFrom(row_indices);
-
-		blurScript.forEach_blur_h(rows);
-		blurScript.forEach_blur_v(columns);
-		inAllocation.copyTo(blurred);
-
-		return blurred;
-	}
+        renderScript.destroy();
+        return inputBmp;
+    }
 }
